@@ -68,8 +68,8 @@ pkgs.devshell.mkShell {
           package = "nixpkgs-review";
         } {
           package = "nix-update";
-        } {
-          package = "nixpkgs-hammering";
+        # } {
+        #   package = "nixpkgs-hammering";
         } ]
     ;
   in linters ++ github ++ workflow;
