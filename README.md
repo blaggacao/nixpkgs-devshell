@@ -53,8 +53,8 @@ $ nix develop github:blaggacao/nixpkgs-devshell
 
 [workflow]
 
-  nix-update           - Swiss-knife for updating nix packages
-  nixpkgs-review       - Review pull-requests on https://github.com/NixOS/nixpkgs
+  review               - Review pull-requests on https://github.com/NixOS/nixpkgs
+  update               - Swiss-knife for updating nix packages
 
 [nixpkgs]$
 ```

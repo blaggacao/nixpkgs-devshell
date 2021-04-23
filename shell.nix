@@ -22,6 +22,9 @@ pkgs.devshell.mkShell {
       fd
       nixpkgs-fmt
       editorconfig-checker
+      nixpkgs-review
+      nix-update
+      # nixpkgs-hammering
     ];
   };
 
@@ -42,34 +45,40 @@ pkgs.devshell.mkShell {
     ;
     github =
       map (e: e // { category = "github"; } )
-         [ {
-           package = "gitAndTools.gh";
-         } {
-           name = "bugs";
-           help = "List issues labeled as bugs";
-           command = "set +x; gh issue list --label=\"0.kind: bug\"";
-         } {
-           name = "packaging-requests";
-           help = "List issues labeled as packaging requests (chill out work)";
-           command = "set +x; gh issue list --label=\"0.kind: packaging request\"";
-         } {
-           name = "pr-status";
-           help = "Information about relevant PRs";
-           command = "set +x; gh pr status";
-         } {
-           name = "issue-status";
-           help = "Information about relevant issues";
-           command = "set +x; gh issue status";
-         } ]
+        [ {
+          package = "gitAndTools.gh";
+        } {
+          name = "bugs";
+          help = "List issues labeled as bugs";
+          command = "set -x; gh issue list --label=\"0.kind: bug\"";
+        } {
+          name = "packaging-requests";
+          help = "List issues labeled as packaging requests (chill out work)";
+          command = "set -x; gh issue list --label=\"0.kind: packaging request\"";
+        } {
+          name = "pr-status";
+          help = "Information about relevant PRs";
+          command = "set -x; gh pr status";
+        } {
+          name = "issue-status";
+          help = "Information about relevant issues";
+          command = "set -x; gh issue status";
+        } ]
     ;
     workflow =
       map (e: e // { category = "workflow"; } )
         [ {
-          package = "nixpkgs-review";
+          name = "review";
+          help = pkgs.nixpkgs-review.meta.description;
+          command = "set -x; nixpkgs-review $${@}";
         } {
-          package = "nix-update";
+          name = "update";
+          help = pkgs.nix-update.meta.description;
+          command = "set -x; nix-update $${@}";
         # } {
-        #   package = "nixpkgs-hammering";
+        #   name = "hammer";
+        #   help = pkgs.nixpkgs-hammering.meta.description;
+        #   command = "set -x; nixpkgs-hammering $${@}";
         } ]
     ;
   in linters ++ github ++ workflow;
