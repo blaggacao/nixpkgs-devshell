@@ -25,51 +25,54 @@ pkgs.devshell.mkShell {
     ];
   };
 
-  commands = with pkgs; [
-    {
-      package = editorconfig-checker;
-      category = "linters";
-    }
-    {
-      name = "fmt";
-      help = "Check Nix formatting";
-      category = "linters";
-      command = "nixpkgs-fmt $${@} .";
-    }
-    {
-      name = "evalnix";
-      help = "Check Nix parsing";
-      category = "linters";
-      command = "fd --extension nix --exec nix-instantiate --parse --quiet {} >/dev/null";
-    }
-    {
-      package = "gitAndTools.gh";
-      category = "github";
-    }
-    {
-      name = "bugs";
-      help = "List issues labeled as bugs";
-      category = "github";
-      command = "gh issue list --label=\"0.kind: bug\"";
-    }
-    {
-      name = "packaging-requests";
-      help = "List issues labeled as packaging requests (chill out work)";
-      category = "github";
-      command = "gh issue list --label=\"0.kind: packaging request\"";
-    }
-    {
-      name = "pr-status";
-      help = "Information about relevant PRs";
-      category = "github";
-      command = "gh pr status";
-    }
-    {
-      name = "issue-status";
-      help = "Information about relevant issues";
-      category = "github";
-      command = "gh issue status";
-    }
-  ];
+  commands = with pkgs; let
+    linters =
+      map (e: e // { category = "linters"; } )
+        [ {
+          package = editorconfig-checker;
+        } {
+          name = "fmt";
+          help = "Check Nix formatting";
+          command = "nixpkgs-fmt $${@} .";
+        } {
+          name = "evalnix";
+          help = "Check Nix parsing";
+          command = "fd --extension nix --exec nix-instantiate --parse --quiet {} >/dev/null";
+        } ]
+    ;
+    github =
+      map (e: e // { category = "github"; } )
+         [ {
+           package = "gitAndTools.gh";
+         } {
+           name = "bugs";
+           help = "List issues labeled as bugs";
+           command = "set +x; gh issue list --label=\"0.kind: bug\"";
+         } {
+           name = "packaging-requests";
+           help = "List issues labeled as packaging requests (chill out work)";
+           command = "set +x; gh issue list --label=\"0.kind: packaging request\"";
+         } {
+           name = "pr-status";
+           help = "Information about relevant PRs";
+           command = "set +x; gh pr status";
+         } {
+           name = "issue-status";
+           help = "Information about relevant issues";
+           command = "set +x; gh issue status";
+         } ]
+    ;
+    workflow =
+      map (e: e // { category = "workflow"; } )
+        [ {
+          package = "nixpkgs-review";
+        } {
+          package = "nix-update";
+        } {
+          package = "nixpkgs-hammering";
+        } ]
+    ;
+  in linters ++ github ++ workflow;
+
 }
 
