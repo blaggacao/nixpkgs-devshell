@@ -20,15 +20,28 @@ let
 
 in
 devshell.mkShell {
+
+  imports = [ "git.hooks" ];
+
+  git.hooks = {
+    enable = true;
+    pre-commit.text = lib.fileContents ./pre-commit.sh;
+  };
+
   devshell = {
     name = "nixpkgs";
     packages = with pkgs; [
       fd
       nixpkgs-fmt
+      editorconfig-checker
     ];
   };
 
-  commands = [
+  commands = with pkgs; [
+    {
+      package = editorconfig-checker;
+      category = "linters";
+    }
     {
       name = "fmt";
       help = "Check Nix formatting";
