@@ -42,6 +42,34 @@ pkgs.devshell.mkShell {
       category = "linters";
       command = "fd --extension nix --exec nix-instantiate --parse --quiet {} >/dev/null";
     }
+    {
+      package = "gitAndTools.gh";
+      category = "github";
+    }
+    {
+      name = "bugs";
+      help = "List issues labeled as bugs";
+      category = "github";
+      command = "gh issue list --label=\"0.kind: bug\"";
+    }
+    {
+      name = "packaging-requests";
+      help = "List issues labeled as packaging requests (chill out work)";
+      category = "github";
+      command = "gh issue list --label=\"0.kind: packaging request\"";
+    }
+    {
+      name = "pr-status";
+      help = "Information about relevant PRs";
+      category = "github";
+      command = "gh pr status";
+    }
+    {
+      name = "issue-status";
+      help = "Information about relevant issues";
+      category = "github";
+      command = "gh issue status";
+    }
   ];
 }
 
