@@ -4,15 +4,13 @@
   inputs = {
     nixpkgs.url = "nixpkgs";
     devshell.url = "github:numtide/devshell";
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, devshell }: {
-
-    devShell = {
-        x86_64-linux = import ./shell.nix { inherit nixpkgs devshell; system = "x86_64-linux"; };
-        x86_64-darwin = import ./shell.nix { inherit nixpkgs devshell; system = "x86_64-darwin"; };
-        aarch64-linux = import ./shell.nix { inherit nixpkgs devshell; system = "aarch64-linux"; };
-    };
-
-  };
+  outputs = { self, nixpkgs, devshell, flake-utils }:
+    flake-utils.lib.eachDefaultSystem (system:
+      {
+        devShell = import ./shell.nix { inherit nixpkgs devshell system; };
+      }
+    );
 }
