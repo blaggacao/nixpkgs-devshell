@@ -1,16 +1,17 @@
 {
-  description = "A very basic flake";
+  description = "NixOS/nixpkgs development environment.";
 
-  outputs = { self, nixpkgs }: {
+  inputs = {
+    nixpkgs.url = "nixpkgs";
+    devshell.url = "github:numtide/devshell";
+  };
 
-    packages.x86_64-linux.hello = nixpkgs.legacyPackages.x86_64-linux.hello;
-
-    defaultPackage.x86_64-linux = self.packages.x86_64-linux.hello;
+  outputs = { self, nixpkgs, devshell }: {
 
     devShell = {
-        x86_64-linux = import ./shell.nix { system = "x86_64-linux"; };
-        x86_64-darwin = import ./shell.nix { system = "x86_64-darwin"; };
-        aarch64-linux = import ./shell.nix { system = "aarch64-linux"; };
+        x86_64-linux = import ./shell.nix { inherit nixpkgs devshell; system = "x86_64-linux"; };
+        x86_64-darwin = import ./shell.nix { inherit nixpkgs devshell; system = "x86_64-darwin"; };
+        aarch64-linux = import ./shell.nix { inherit nixpkgs devshell; system = "aarch64-linux"; };
     };
 
   };
