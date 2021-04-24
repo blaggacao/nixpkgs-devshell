@@ -53,8 +53,9 @@ $ nix develop github:blaggacao/nixpkgs-devshell
 
 [workflow]
 
-  review               - Review pull-requests on https://github.com/NixOS/nixpkgs
-  update               - Swiss-knife for updating nix packages
+  new                  - Bootstrap a new contribution from templates
+  review               - Review your contribution against current upstream before submitting
+  update               - Update a package / your contribution
 
 [nixpkgs]$
 ```

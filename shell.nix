@@ -1,10 +1,15 @@
-{ nixpkgs, devshell, system ? builtins.currentSystem }:
+{ nixpkgs, devshell, templates, system ? builtins.currentSystem }:
 let
 
   pkgs = import nixpkgs {
     inherit system;
     overlays = [ devshell.overlay ];
   };
+
+  # wrappers to present a +- consistent workflow UX as tooling evolves
+  new = pkgs.callPackage ./new-cli.nix { inherit templates; };
+  update = pkgs.callPackage ./update-cli.nix { };
+  review = pkgs.callPackage ./review-cli.nix { };
 
 in
 pkgs.devshell.mkShell {
@@ -68,13 +73,11 @@ pkgs.devshell.mkShell {
     workflow =
       map (e: e // { category = "workflow"; } )
         [ {
-          name = "review";
-          help = pkgs.nixpkgs-review.meta.description;
-          command = "set -x; nixpkgs-review $${@}";
+          package = review;
         } {
-          name = "update";
-          help = pkgs.nix-update.meta.description;
-          command = "set -x; nix-update $${@}";
+          package = update;
+        } {
+          package = new;
         # } {
         #   name = "hammer";
         #   help = pkgs.nixpkgs-hammering.meta.description;
