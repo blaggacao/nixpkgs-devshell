@@ -57,6 +57,34 @@ $ nix develop github:blaggacao/nixpkgs-devshell
   review               - Review your contribution against current upstream before submitting
   update               - Update a package / your contribution
 
+$ new
+Usage: new TEMPLATE
+
+Templates:
+  go-module                      how-to package a go module for nixpkgs
+
+  go-package                     how-to package a go package for nixpkgs
+
+$ review
+Usage: review [OPTS] COMMAND
+
+Options:
+  --system                       review for a different architecure
+
+
+Commands:
+  unstaged                       review unstaged changes
+
+  staged                         review staged changes
+
+$ update
+Usage: update [OPTS] PACKAGE
+
+Options:
+  --commit                       Commit the update with an appropriate commit message
+
+  --review                       Validate this and all dependent packages
+
 [nixpkgs]$
 ```
 
